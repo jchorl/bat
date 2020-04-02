@@ -126,7 +126,9 @@ impl<'a> InteractivePrinter<'a> {
         // Create decorations.
         let mut decorations: Vec<Box<dyn Decoration>> = Vec::new();
 
+        println!("checking numbers");
         if config.style_components.numbers() {
+            println!("numbers");
             decorations.push(Box::new(LineNumberDecoration::new(&colors)));
         }
 
