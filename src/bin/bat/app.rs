@@ -176,6 +176,7 @@ impl App {
                 Some("auto") | _ => self.interactive_output,
             },
             paging_mode,
+            buffer: None,
             term_width: maybe_term_width.unwrap_or(Term::stdout().size().1 as usize),
             loop_through: !(self.interactive_output
                 || self.matches.value_of("color") == Some("always")

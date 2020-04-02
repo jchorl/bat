@@ -53,6 +53,9 @@ pub struct Config<'a> {
     /// Pager or STDOUT
     pub paging_mode: PagingMode,
 
+    /// An optional buffer to print results to
+    pub buffer: Option<Vec<u8>>,
+
     /// Specifies the lines that should be printed
     pub line_ranges: LineRanges,
 

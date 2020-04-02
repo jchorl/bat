@@ -14,6 +14,7 @@ use crate::less::retrieve_less_version;
 pub enum OutputType {
     Pager(Child),
     Stdout(io::Stdout),
+    Buffer(Vec<u8>),
 }
 
 impl OutputType {
@@ -24,6 +25,10 @@ impl OutputType {
             QuitIfOneScreen => OutputType::try_pager(true, pager)?,
             _ => OutputType::stdout(),
         })
+    }
+
+    pub fn from_buffer(buf: Vec<u8>) -> Result<Self> {
+        Ok(OutputType::Buffer(buf))
     }
 
     /// Try to launch the pager. Fall back to stdout in case of errors.
@@ -121,6 +126,7 @@ impl OutputType {
                 .as_mut()
                 .chain_err(|| "Could not open stdin for pager")?,
             OutputType::Stdout(ref mut handle) => handle,
+            OutputType::Buffer(ref mut buf) => buf,
         })
     }
 }
