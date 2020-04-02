@@ -39,7 +39,10 @@ impl<'b> Controller<'b> {
             }
         }
 
-        let mut output_type = OutputType::from_mode(paging_mode, self.config.pager)?;
+        let mut output_type = match self.config.buffer {
+            Some(buf) => OutputType::from_buffer(buf)?,
+            None => OutputType::from_mode(paging_mode, self.config.pager)?
+        };
         let writer = output_type.handle()?;
         let mut no_errors: bool = true;
 

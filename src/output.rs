@@ -11,13 +11,13 @@ use crate::errors::*;
 use crate::less::retrieve_less_version;
 
 #[derive(Debug)]
-pub enum OutputType {
+pub enum OutputType <'a> {
     Pager(Child),
     Stdout(io::Stdout),
-    Buffer(Vec<u8>),
+    Buffer(&'a mut Vec<u8>),
 }
 
-impl OutputType {
+impl<'a> OutputType<'a> {
     pub fn from_mode(mode: PagingMode, pager: Option<&str>) -> Result<Self> {
         use self::PagingMode::*;
         Ok(match mode {
@@ -27,7 +27,7 @@ impl OutputType {
         })
     }
 
-    pub fn from_buffer(buf: Vec<u8>) -> Result<Self> {
+    pub fn from_buffer(buf: &'a mut Vec<u8>) -> Result<Self> {
         Ok(OutputType::Buffer(buf))
     }
 
@@ -131,7 +131,7 @@ impl OutputType {
     }
 }
 
-impl Drop for OutputType {
+impl<'a> Drop for OutputType<'a> {
     fn drop(&mut self) {
         if let OutputType::Pager(ref mut command) = *self {
             let _ = command.wait();
